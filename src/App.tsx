@@ -4,8 +4,7 @@ import RadioPlayer from "./components/RadioPlayer"
 
 const App = () => {
   return (
-    <div className="text-2xl">
-      React + Tailwind CSS + Typescript
+    <div className="">
       <RadioPlayer />
     </div>
   )
