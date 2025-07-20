@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { FetchApi } from "../utils/FetchApi"
 import MediaPLayer from '../assets/MediaPlayer.png'
 import { CaretRightOutlined, MutedOutlined, PauseOutlined, SoundOutlined } from "@ant-design/icons"
@@ -25,9 +25,58 @@ const RadioPlayer = () => {
         // console.log(muted)
         SetMuted(!muted)
     }
-    const now = new Date()
-    const hour = now.getHours()
-    const minuts = now.getMinutes()
+
+    const [hour, setHour] = useState('')
+    const [minut, setMinut] = useState('')
+    const [date, setDate] = useState<Date>(new Date())
+
+    useEffect(() => {
+        const updateTime = () => {
+            const now = new Date()
+            const hours = now.getHours()
+            const minuts = now.getMinutes()
+
+            const format2digits = (num: number) => num < 10 ? '0' + num : '' + num
+
+            const hours12 = hours % 12
+            const minuts60 = minuts % 60
+
+            const hourswithformat = format2digits(hours12 ? hours12 : 12)
+            const minutswithformat = format2digits(minuts60 ? minuts60 : 60)
+
+            setHour(hourswithformat)
+            setMinut(minutswithformat)
+            setDate(now)
+        }
+
+        updateTime()
+        const interval = setInterval(updateTime, 1000 * 60)
+
+        return () => {
+            clearInterval(interval)
+        }
+    }, [])
+
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+
+    const monthname = [
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Septiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre"
+    ]
+
+    const monthtoname = monthname[month - 1]
+
 
 
     /* https://de1.api.radio-browser.info/json/stations/bycountry/Peru */
@@ -40,16 +89,19 @@ const RadioPlayer = () => {
                     alt="Radiomar Logo"
                     className="w-full shadow-lg rounded-xl"
                 />
-                <div className="flex">
-                    <div>
-                        <h2 className="text-2xl font-bold uppercase">Viva FM</h2>
-                        <p>PE</p>
+                <div className="flex w-full px-4 absolute top-24 ">
+                    <div className="w-[33%] flex-col justify-center">
+                        <h2 className="text-zinc-400 text-xl font-bold
+  [text-shadow:1px_1px_0_white,-1px_-1px_0_white,-1px_1px_0_white,1px_-1px_0_white]">Viva FM</h2>
+                        <p className="inline text-zinc-500">PE</p>
                     </div>
-                    <div>
+                    <div className="w-[33%] flex justify-center">
                         <h2 className="font-light">tag</h2>
                     </div>
-                    <div>
-                        <p></p>
+                    <div className="w-[33%] flex flex-col items-end">
+                        <p className="inline">{`${hour}:${minut}`}</p>
+                        {<p className="inline text-zinc-500">{`${day} ${monthtoname}`}</p>}
+
                     </div>
                 </div>
 
