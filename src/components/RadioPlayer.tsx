@@ -9,6 +9,12 @@ const RadioPlayer = () => {
     const [muted, SetMuted] = useState(false)
     const AudioRef = useRef<HTMLAudioElement>(null)
 
+    const consultApi = async () => {
+        const Radios = await FetchApi()
+        console.log(Radios)
+    }
+
+
     const tigger = () => {
         if (!AudioRef.current) return
 
@@ -16,8 +22,9 @@ const RadioPlayer = () => {
 
         SetPlaying(!playing)
         SetMuted(!muted)
-        FetchApi()
     }
+
+
     const tiggerMuted = () => {
         if (!AudioRef.current) return
 
@@ -29,6 +36,11 @@ const RadioPlayer = () => {
     const [hour, setHour] = useState('')
     const [minut, setMinut] = useState('')
     const [date, setDate] = useState<Date>(new Date())
+
+    useEffect(() => {
+        consultApi()
+        
+    },[])
 
     useEffect(() => {
         const updateTime = () => {
@@ -82,7 +94,7 @@ const RadioPlayer = () => {
     /* https://de1.api.radio-browser.info/json/stations/bycountry/Peru */
 
     return (
-        <div className="w-full h-screen flex items-center justify-center bg-gray-100">
+        <div className="w-full h-screen flex pt-4 justify-center bg-gray-100">
             <div className="relative w-[80%] max-w-md">
                 <img
                     src={MediaPLayer}
@@ -91,23 +103,23 @@ const RadioPlayer = () => {
                 />
                 <div className="flex w-full px-4 absolute top-24 ">
                     <div className="w-[33%] flex-col justify-center">
-                        <h2 className="text-zinc-400 text-xl font-bold
+                        <h2 className="text-zinc-400 text-xl font-bold font-nunito
   [text-shadow:1px_1px_0_white,-1px_-1px_0_white,-1px_1px_0_white,1px_-1px_0_white]">Viva FM</h2>
-                        <p className="inline text-zinc-500">PE</p>
+                        <p className="inline font-nunito text-zinc-500">PE</p>
                     </div>
                     <div className="w-[33%] flex justify-center">
-                        <h2 className="font-light">tag</h2>
+                        <h2 className="font-light font-nunito ">tag</h2>
                     </div>
                     <div className="w-[33%] flex flex-col items-end">
-                        <p className="inline">{`${hour}:${minut}`}</p>
-                        {<p className="inline text-zinc-500">{`${day} ${monthtoname}`}</p>}
+                        <p className="inline font-nunito">{`${hour}:${minut}`}</p>
+                        {<p className="inline font-nunito text-zinc-500">{`${day} ${monthtoname}`}</p>}
 
                     </div>
                 </div>
 
                 <button
                     onClick={tigger}
-                    className="absolute top-48 left-33  bg-transparent  text-zinc-500 text-4xl px-6 py-6 rounded-full  hover:bg-purple-700 transition-all"
+                    className="absolute top-48 left-33  bg-transparent  text-zinc-500 text-4xl px-6 py-6 rounded-full"
                 >
                     {playing ? <PauseOutlined /> : <CaretRightOutlined />}
                 </button>
